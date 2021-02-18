@@ -2,4 +2,4 @@
 
 ### TODO
 
-- [] figure out icon
+- [ ] figure out icon
