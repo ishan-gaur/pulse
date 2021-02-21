@@ -1,9 +1,13 @@
 import numpy as np
+from joblib import dump, load
 from datasets import load_dataset
 from sklearn.linear_model import LogisticRegression
 
 embeddings_dict = {}
 
+# TODO: Need the appropriate auto loading of the model upon import so that predict is an instant operation
+# TODO: Also need to get the glove loading right
+# Application should just load model and embedding on creation (pretrained) and then predict on POST to /measure-pulse
 def word_embedding(str, title):
     # input is title and target
     # pad title (20 words) and target (10 words)
@@ -69,6 +73,16 @@ def train():
     clf = LogisticRegression().fit(np.asarray(X), np.asarray(y))
     return clf
 
+# TODO: definitely need to get rid of these, just here as placeholders
+default_save_location = 'sentiment-model.joblib'
+def train_and_save_model():
+    clf = train()
+    dump(clf, default_save_location) 
+
+def sentiment_inference_from_saved(model_file=default_save_location, title=None, target=None):
+    clf = load(model_file) 
+    return predict(clf, title, target)
+
 def test(clf):
     titles = []
     targets = []
@@ -90,13 +104,18 @@ def test(clf):
 
     print(clf.score(X, y))
 
-def predict(title, target):
+def predict(clf=None, title=None, target=None):
     pass
 
 def main():
+    """
     load_glove()
     clf = train()
     test(clf)
     predict("title", "target")
+    """
+    load_glove()
+    train_and_save_model()
+    sentiment_inference_from_saved(title="title", target="target")
 
 if __name__ == "__main__": main()
