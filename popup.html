@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="styles.css">
+  <title>Pulse Popup</title>
+</head>
+<body>
+  <h1>Pulse</h1>
+  <form id="form">
+    <label for="title">Title</label>
+    <br>
+    <input
+      type="text"
+      id="title"
+      name="title"
+      placeholder="Enter a title..."
+    >
+    <br><br>
+    <label for="keyword">Keyword</label>
+    <br>
+    <input
+      type="text"
+      id="keyword"
+      name="keyword"
+      placeholder="Enter a keyword..."
+    >
+    <br>
+    <br>
+    <input type="submit" value="Go">
+  </form>
+  <h2>Output</h2>
+  <p id="log-timestamp"></p>
+  <p id="log-title"></p>
+  <p id="log-keyword"></p>
+  <p id="log-classification"></p>
+  <script src="popup.js" charset="utf-8"></script>
+</body>
+</html>
