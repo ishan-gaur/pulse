@@ -35,19 +35,25 @@
     <input type="submit" value="Go">
   </form>
 
-  <h2>Output</h2>
-  <!-- <p id="log-timestamp"></p> -->
-  <p id="log-title"></p>
-  <p id="log-target"></p>
-  <p id="log-classification"></p>
+  <div id="output">
+    <h2>Output</h2>
+    <!-- <p id="log-timestamp"></p> -->
+    <p class="bold">Title: <span id="log-title"></span></p>
+    <p class="bold">Target: <span id="log-target"></span></p>
+    <p class="bold">Classification: <span id="log-classification"></span></p>
 
-  <form id="feedback-form-yes">
-    <input type="submit" id="input-yes" name="Yes" value="Yes">
-  </form>
-
-  <form id="feedback-form-no">
-    <input type="submit" id="input-no" name="No" value="No">
-  </form>
+    <div class="feedback-form">
+      <p class="feedback-item">Was this correct?</p>
+      
+      <form class="feedback-item" id="feedback-form-yes">
+        <input type="submit" id="input-yes" name="Yes" value="Yes">
+      </form>
+      
+      <form class="feedback-item" id="feedback-form-no" style="margin-right: 15px;">
+        <input type="submit" id="input-no" name="No" value="No">
+      </form>
+    </div>
+  </div>
 
   <script src="popup.js" charset="utf-8"></script>
 </body>

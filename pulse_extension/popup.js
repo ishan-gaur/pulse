@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-  function postData(input) {
+  function postData() {
     const xml = new XMLHttpRequest();
-    const url=`http://localhost:5000/predict?title=${input.title}&target=${input.target}`;
+    const url=`http://localhost:5000/predict?title=${title}&target=${target}`;
     xml.open("GET", url);
     xml.send();
 
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function postFeedback(correct) {
     const xml = new XMLHttpRequest();
-    const url=`http://localhost:5000/feedback?correct=${correct}&title=${input.title}&target=${input.target}`;
+    const url=`http://localhost:5000/feedback?correct=${correct}&title=${title}&target=${target}`;
     xml.open("GET", url);
     xml.send();
 
@@ -24,29 +24,35 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function showResponse(res) {
     // logTimestamp.textContent = `Time stamp: ${timestamp}`;
-    logTitle.textContent = `title: ${title}`;
-    logTarget.textContent = `target: ${target}`;
-    logClassification.textContent = `classification: ${res}`;
+    logTitle.textContent = `${title}`;
+    logTarget.textContent = `${target}`;
+    logClassification.textContent = `${res}`;
+
+    logClassification.style.color = (res === "Positive") ? '#21B20C' : red;
   }
 
   function logSubmit(event) {
+    divOutput.style.display = 'block';
+
     title = document.getElementById('title').value;
     target = document.getElementById('target').value;
     timestamp = event.timeStamp;
     
     event.preventDefault();
 
-    postData({ title: title, target: target });
+    postData();
   }
 
   function yesSubmit(event) {
     event.preventDefault();
     postFeedback('yes');
+    divOutput.style.display = 'none';
   }
 
   function noSubmit(event) {
     event.preventDefault();
     postFeedback('no');
+    divOutput.style.display = 'none';
   }
   
   const form = document.getElementById('form');
@@ -56,6 +62,8 @@ document.addEventListener('DOMContentLoaded', function () {
   form.addEventListener('submit', logSubmit);
   formYes.addEventListener('submit', yesSubmit);
   formNo.addEventListener('submit', noSubmit);
+
+  const divOutput = document.getElementById('output');
 
   // const logTimestamp = document.getElementById('log-timestamp');
   const logTitle = document.getElementById('log-title');

@@ -38,7 +38,7 @@ def log_user_feedback():
     # TODO: error checking for the form entries?
     title = request.args.get('title')
     target = request.args.get('target')
-    correct = True if request.args.get('correct') == "Yes" else False
+    correct = True if request.args.get('correct') == "yes" else False
 
     sent = 1 if predict(clf, title=title, target=target)[0] == 2 else -1
     if not correct: sent *= -1
