@@ -22,10 +22,10 @@ load_glove()
 # def index():
 #     return render_template("index.html")
 
-@app.route("/predict", methods=["POST"])
+@app.route("/predict")
 def predict_sentiment():
-    title = request.form['title']
-    target = request.form['target']
+    title = request.args.get('title')
+    target = request.args.get('target')
     if not title or not target:
         return "FAILURE, MISSING ARGUMENTS"
     sent = "Positive" if predict(clf, title=title, target=target)[0] == 2 else "Negative"
