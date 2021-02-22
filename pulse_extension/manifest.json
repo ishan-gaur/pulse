@@ -1,0 +1,28 @@
+{
+  "manifest_version": 2,
+  "name": "Pulse",
+  "description": "Runs sentiment analysis on search result titles",
+  "version": "0.1",
+
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_title": "Pulse"
+  },
+
+  "permissions": [
+    "activeTab",
+    "https://ajax.googleapis.com/",
+    "http://localhost/"
+  ],
+
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.google.com/search*"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ]
+}

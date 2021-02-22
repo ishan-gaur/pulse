@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="styles.css">
+  <title>Pulse Popup</title>
+</head>
+
+<body>
+  <h1>Pulse</h1>
+
+  <form id="form">
+    <label for="text">Text</label>
+    <br>
+    <input
+      type="text"
+      id="title"
+      name="title"
+      placeholder="Enter an article title..."
+    >
+    <br><br>
+
+    <label for="target">Target</label>
+    <br>
+    <input
+      type="text"
+      id="target"
+      name="target"
+      placeholder="Enter a target keyword..."
+    >
+    <br><br>
+
+    <input type="submit" value="Go">
+  </form>
+
+  <div id="output">
+    <h2>Output</h2>
+    <!-- <p id="log-timestamp"></p> -->
+    <p class="bold">Title: <span id="log-title"></span></p>
+    <p class="bold">Target: <span id="log-target"></span></p>
+    <p class="bold">Classification: <span id="log-classification"></span></p>
+
+    <div class="feedback-form">
+      <p class="feedback-item">Was this correct?</p>
+      
+      <form class="feedback-item" id="feedback-form-yes">
+        <input type="submit" id="input-yes" name="Yes" value="Yes">
+      </form>
+      
+      <form class="feedback-item" id="feedback-form-no" style="margin-right: 15px;">
+        <input type="submit" id="input-no" name="No" value="No">
+      </form>
+    </div>
+  </div>
+
+  <script src="popup.js" charset="utf-8"></script>
+</body>
+</html>
