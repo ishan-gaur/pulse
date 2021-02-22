@@ -2,6 +2,7 @@ import numpy as np
 from joblib import dump, load
 from datasets import load_dataset
 from sklearn.linear_model import LogisticRegression
+import json
 
 embeddings_dict = {}
 
@@ -69,6 +70,7 @@ def train():
 
     X = np.asarray(X)
     X = X.reshape(X.shape[0], X.shape[1] * X.shape[2])
+    print(y)
 
     clf = LogisticRegression().fit(np.asarray(X), np.asarray(y))
     return clf
@@ -80,7 +82,8 @@ def train_and_save_model():
     dump(clf, default_save_location) 
 
 def sentiment_inference_from_saved(model_file=default_save_location, title=None, target=None):
-    clf = load(model_file) 
+    clf = load(model_file)
+    load_glove()
     return predict(clf, title, target)
 
 def test(clf):
@@ -105,7 +108,11 @@ def test(clf):
     print(clf.score(X, y))
 
 def predict(clf=None, title=None, target=None):
-    pass
+    title_embedding = word_embedding(title, True)
+    target_embedding = word_embedding(target, False)
+    full_embedding = np.concatenate((title_embedding, target_embedding))
+
+    return clf.predict(full_embedding.flatten().reshape(1, -1))
 
 def main():
     """
@@ -116,6 +123,6 @@ def main():
     """
     load_glove()
     train_and_save_model()
-    sentiment_inference_from_saved(title="title", target="target")
+    # print(sentiment_inference_from_saved(title="title", target="target"))
 
 if __name__ == "__main__": main()
