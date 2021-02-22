@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function showResponse(res) {
-    logTimestamp.textContent = `Time stamp: ${timestamp}`;
+    // logTimestamp.textContent = `Time stamp: ${timestamp}`;
     logTitle.textContent = `title: ${title}`;
     logTarget.textContent = `target: ${target}`;
     logClassification.textContent = `classification: ${res}`;
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
   formYes.addEventListener('submit', yesSubmit);
   formNo.addEventListener('submit', noSubmit);
 
-  const logTimestamp = document.getElementById('log-timestamp');
+  // const logTimestamp = document.getElementById('log-timestamp');
   const logTitle = document.getElementById('log-title');
   const logTarget = document.getElementById('log-target');
   const logClassification = document.getElementById('log-classification');
