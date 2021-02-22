@@ -1,13 +1,17 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="styles.css">
   <title>Pulse Popup</title>
 </head>
+
 <body>
   <h1>Pulse</h1>
-  <form id="form">
+
+  <form id="form" action = "http://localhost:5000/predict" method = "POST">
     <label for="text">Text</label>
     <br>
     <input
@@ -17,6 +21,7 @@
       placeholder="Enter an article title..."
     >
     <br><br>
+
     <label for="target">Target</label>
     <br>
     <input
@@ -25,16 +30,16 @@
       name="target"
       placeholder="Enter a target keyword..."
     >
-    <br>
-    <br>
+    <br><br>
+
     <input type="submit" value="Go">
   </form>
+
   <h2>Output</h2>
   <p id="log-timestamp"></p>
   <p id="log-text"></p>
   <p id="log-target"></p>
   <p id="log-classification"></p>
   <script src="popup.js" charset="utf-8"></script>
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 </body>
 </html>
