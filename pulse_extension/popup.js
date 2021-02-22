@@ -16,8 +16,10 @@ document.addEventListener('DOMContentLoaded', function () {
   function postFeedback(correct) {
     const xml = new XMLHttpRequest();
     const url=`http://localhost:5000/feedback?correct=${correct}&title=${input.title}&target=${input.target}`;
-    xml.open("POST", url);
+    xml.open("GET", url);
     xml.send();
+
+    // TODO: verify success response
   }
 
   function showResponse(res) {
