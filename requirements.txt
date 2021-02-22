@@ -14,7 +14,7 @@ Jinja2==2.11.3
 joblib==1.0.1
 MarkupSafe==1.1.1
 multiprocess==0.70.11.1
-numpy==1.20.1
+numpy==1.18.1
 pandas==1.2.2
 pi==0.1.2
 pyarrow==3.0.0
