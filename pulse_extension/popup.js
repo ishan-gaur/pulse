@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function showResponse(res) {
+    if (res === '') {
+      res = 'unable to predict'
+    }
     // logTimestamp.textContent = `Time stamp: ${timestamp}`;
     logTitle.textContent = `${title}`;
     logTarget.textContent = `${target}`;
@@ -47,12 +50,16 @@ document.addEventListener('DOMContentLoaded', function () {
     event.preventDefault();
     postFeedback('yes');
     divOutput.style.display = 'none';
+    document.getElementById('title').value = "";
+    document.getElementById('target').value = "";
   }
 
   function noSubmit(event) {
     event.preventDefault();
     postFeedback('no');
     divOutput.style.display = 'none';
+    document.getElementById('title').value = "";
+    document.getElementById('target').value = "";
   }
   
   const form = document.getElementById('form');
