@@ -2,20 +2,29 @@
 document.addEventListener('DOMContentLoaded', function () {
 
   function postData(input) {
-    const Http = new XMLHttpRequest();
-    const url=`localhost:5000/${input.title}/${input.keyword}`;
-    Http.open("GET", url);
-    Http.send();
+    // const Http = new XMLHttpRequest();
+    const url='localhost:5000/predict';
+    // Http.open("GET", url);
+    // Http.send();
 
-    Http.onreadystatechange = (e) => {
-      console.log(Http.responseText);
-      showResponse(Http.responseText);
-    }
+    // Http.onreadystatechange = (e) => {
+    //   console.log(Http.responseText);
+    //   showResponse(Http.responseText);
+    // }
+    $.ajax({
+      url: url,
+      type: "GET",
+      headers: {
+        "text": input.text,
+        "target": input.target
+      },
+      success: showResponse
+    });
   }
 
   function logSubmit(event) {
-    title = document.getElementById('title').value;
-    keyword = document.getElementById('keyword').value;
+    text = document.getElementById('text').value;
+    target = document.getElementById('target').value;
     timestamp = event.timeStamp;
     
     event.preventDefault();
@@ -24,29 +33,29 @@ document.addEventListener('DOMContentLoaded', function () {
     // chrome.tabs.query({currentWindow: true, active: true}, function (tabs) {
     //   chrome.tabs.sendMessage(
     //     tabs[0].id,
-    //     { title: title, keyword: keyword, time: timestamp },
+    //     { text: text, target: target, time: timestamp },
     //     showResponse);
     // });
     
-    postData({ title: title, keyword: keyword })
+    postData({ text: text, target: target })
 
   }
 
   function showResponse (res) {
     logTimestamp.textContent = `Time stamp: ${timestamp}`;
-    logTitle.textContent = `Title: ${title}`;
-    logKeyword.textContent = `Keyword: ${keyword}`;
-    logClassification.textContent = `Classification: ${res.classification}`;
+    logtext.textContent = `text: ${text}`;
+    logtarget.textContent = `target: ${target}`;
+    logClassification.textContent = `Classification: ${res}`;
   }
   
   const form = document.getElementById('form');
   const logTimestamp = document.getElementById('log-timestamp');
-  const logTitle = document.getElementById('log-title');
-  const logKeyword = document.getElementById('log-keyword');
+  const logtext = document.getElementById('log-text');
+  const logtarget = document.getElementById('log-target');
   const logClassification = document.getElementById('log-classification');
 
-  var title = document.getElementById('title').value;
-  var keyword = document.getElementById('keyword').value;
+  var text = document.getElementById('text').value;
+  var target = document.getElementById('target').value;
   var timestamp = ''
   
   form.addEventListener('submit', logSubmit);

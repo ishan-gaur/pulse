@@ -8,22 +8,22 @@
 <body>
   <h1>Pulse</h1>
   <form id="form">
-    <label for="title">Title</label>
+    <label for="text">text</label>
     <br>
     <input
       type="text"
-      id="title"
-      name="title"
-      placeholder="Enter a title..."
+      id="text"
+      name="text"
+      placeholder="Enter an article title..."
     >
     <br><br>
-    <label for="keyword">Keyword</label>
+    <label for="target">target</label>
     <br>
     <input
       type="text"
-      id="keyword"
-      name="keyword"
-      placeholder="Enter a keyword..."
+      id="target"
+      name="target"
+      placeholder="Enter a target keyword..."
     >
     <br>
     <br>
@@ -31,9 +31,10 @@
   </form>
   <h2>Output</h2>
   <p id="log-timestamp"></p>
-  <p id="log-title"></p>
-  <p id="log-keyword"></p>
+  <p id="log-text"></p>
+  <p id="log-target"></p>
   <p id="log-classification"></p>
   <script src="popup.js" charset="utf-8"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </body>
 </html>
