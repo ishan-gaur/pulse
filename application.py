@@ -84,8 +84,8 @@ def train_and_save_model():
     dump(clf, default_save_location) 
 
 def sentiment_inference_from_saved(model_file=default_save_location, title=None, target=None):
-    clf = load(model_file)
-    load_glove()
+    # clf = load(model_file)
+    # load_glove()
     return predict(clf, title, target)
 
 def test(clf):
