@@ -11,18 +11,34 @@ document.addEventListener('DOMContentLoaded', function () {
     //   console.log(Http.responseText);
     //   showResponse(Http.responseText);
     // }
-    $.ajax({
-      url: url,
-      type: "GET",
-      headers: {
-        "text": input.text,
-        "target": input.target
-      },
-      success: showResponse
-    });
+    console.log('in postData');
+    // $.ajax({
+    //   url: url,
+    //   type: "GET",
+    //   headers: {
+    //     "text": input.text,
+    //     "target": input.target
+    //   },
+    //   success: showResponse
+    // });
+
+
+    // ajax = function(options, callback) {
+    //   var xhr;
+    //   xhr = new XMLHttpRequest();
+    //   xhr.open(options.type, options.url, options.async || true);
+    //   xhr.onreadystatechange = function() {
+    //     if (xhr.readyState === 4) {
+    //       return callback(xhr.responseText);
+    //     }
+    //   };
+    //   return xhr.send();
+    // };
   }
 
   function logSubmit(event) {
+    console.log('in logSubmit');
+
     text = document.getElementById('text').value;
     target = document.getElementById('target').value;
     timestamp = event.timeStamp;
@@ -36,8 +52,8 @@ document.addEventListener('DOMContentLoaded', function () {
     //     { text: text, target: target, time: timestamp },
     //     showResponse);
     // });
-    
-    postData({ text: text, target: target })
+    console.log('in logSubmit');
+    postData({ text: text, target: target });
 
   }
 
@@ -47,6 +63,8 @@ document.addEventListener('DOMContentLoaded', function () {
     logtarget.textContent = `target: ${target}`;
     logClassification.textContent = `Classification: ${res}`;
   }
+
+  console.log('charles magic touch');
   
   const form = document.getElementById('form');
   const logTimestamp = document.getElementById('log-timestamp');
@@ -54,9 +72,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const logtarget = document.getElementById('log-target');
   const logClassification = document.getElementById('log-classification');
 
-  var text = document.getElementById('text').value;
+  var text = document.getElementById('title').value;
   var target = document.getElementById('target').value;
-  var timestamp = ''
+  var timestamp = '';
   
   form.addEventListener('submit', logSubmit);
   
