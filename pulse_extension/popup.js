@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
     logTarget.textContent = `${target}`;
     logClassification.textContent = `${res}`;
 
-    logClassification.style.color = (res === "Positive") ? '#21B20C' : red;
+    logClassification.style.color = (res === "Positive") ? '#21B20C' : 'red';
   }
 
   function logSubmit(event) {
