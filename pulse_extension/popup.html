@@ -37,9 +37,19 @@
 
   <h2>Output</h2>
   <p id="log-timestamp"></p>
-  <p id="log-text"></p>
+  <p id="log-title"></p>
   <p id="log-target"></p>
   <p id="log-classification"></p>
+
+  <form
+    id="feedback-form"
+    action="http://localhost:5000/feedback"
+    method="POST"
+  >
+    <input type="submit" value="Yes">
+    <input type="submit" value="No">
+  </form>
+
   <script src="popup.js" charset="utf-8"></script>
 </body>
 </html>
