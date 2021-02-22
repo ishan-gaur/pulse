@@ -143,6 +143,6 @@ def get_sentiment(text, target):
 
 @app.route("/predict")
 def predict_sentiment(text=None, target=None):
-    text = request.args.get('text', default = "", type = str)
-    target = request.args.get('target', default = "", type = str)
+    text = request.headers['text']
+    target = request.headers['target']
     return "Positive" if sentiment_inference_from_saved(title=text, target=target)[0] == 2 else "Negative"
