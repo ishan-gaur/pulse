@@ -1,53 +1,23 @@
 document.addEventListener('DOMContentLoaded', function () {
 
   function postData(input) {
-    const Http = new XMLHttpRequest();
+    const xml = new XMLHttpRequest();
     const url=`http://localhost:5000/predict?title=${input.title}&target=${input.target}`;
-    Http.open("GET", url);
-    Http.send();
+    xml.open("GET", url);
+    xml.send();
 
-    Http.onreadystatechange = (e) => {
-      if (Http.readyState === 4) {
-        console.log(Http.responseText);
-        showResponse(Http.responseText);
+    xml.onreadystatechange = () => {
+      if (xml.readyState === 4) {
+        showResponse(xml.responseText);
       }
     }
-    console.log('in postData');
-    // $.ajax({
-    //   url: url,
-    //   type: "GET",
-    //   headers: {
-    //     "text": input.text,
-    //     "target": input.target
-    //   },
-    //   success: showResponse
-    // });
-
-
-    // ajax = function(options, callback) {
-    //   var xhr;
-    //   xhr = new XMLHttpRequest();
-    //   xhr.open(options.type, options.url, options.async || true);
-    //   xhr.onreadystatechange = function() {
-    //     if (xhr.readyState === 4) {
-    //       return callback(xhr.responseText);
-    //     }
-    //   };
-    //   return xhr.send();
-    // };
   }
 
-  function logSubmit(event) {
-    console.log('in logSubmit');
-
-    title = document.getElementById('title').value;
-    target = document.getElementById('target').value;
-    timestamp = event.timeStamp;
-    
-    event.preventDefault();
-
-    console.log('in logSubmit');
-    postData({ title: title, target: target });
+  function postFeedback(correct) {
+    const xml = new XMLHttpRequest();
+    const url=`http://localhost:5000/feedback?correct=${correct}&title=${input.title}&target=${input.target}`;
+    xml.open("POST", url);
+    xml.send();
   }
 
   function showResponse(res) {
@@ -57,9 +27,34 @@ document.addEventListener('DOMContentLoaded', function () {
     logClassification.textContent = `classification: ${res}`;
   }
 
-  console.log('charles magic touch');
+  function logSubmit(event) {
+    title = document.getElementById('title').value;
+    target = document.getElementById('target').value;
+    timestamp = event.timeStamp;
+    
+    event.preventDefault();
+
+    postData({ title: title, target: target });
+  }
+
+  function yesSubmit(event) {
+    event.preventDefault();
+    postFeedback('yes');
+  }
+
+  function noSubmit(event) {
+    event.preventDefault();
+    postFeedback('no');
+  }
   
   const form = document.getElementById('form');
+  const formYes = document.getElementById('feedback-form-yes');
+  const formNo = document.getElementById('feedback-form-no');
+
+  form.addEventListener('submit', logSubmit);
+  formYes.addEventListener('submit', yesSubmit);
+  formNo.addEventListener('submit', noSubmit);
+
   const logTimestamp = document.getElementById('log-timestamp');
   const logTitle = document.getElementById('log-title');
   const logTarget = document.getElementById('log-target');
@@ -68,7 +63,4 @@ document.addEventListener('DOMContentLoaded', function () {
   var title = document.getElementById('title').value;
   var target = document.getElementById('target').value;
   var timestamp = '';
-  
-  form.addEventListener('submit', logSubmit);
-  
 }, false)
