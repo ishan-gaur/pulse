@@ -141,6 +141,8 @@ def get_sentiment(text, target):
     # TODO add log of result: app.logger.info("Sentiment \"%s\" for text \"%s\" with target \"%s\"", sent, text, target)
     return render_template("sentiment-result.html", sent="Positive" if sentiment_inference_from_saved(title=text, target=target)[0] == 2 else "Negative", text=text, target=target)
 
-@app.route("/predict/text/target")
+@app.route("/predict")
 def predict_sentiment(text=None, target=None):
+    text = request.args.get('text', default = "", type = str)
+    target = request.args.get('target', default = "", type = str)
     return "Positive" if sentiment_inference_from_saved(title=text, target=target)[0] == 2 else "Negative"
