@@ -15,7 +15,7 @@ for (var i = 0, l = elements.length; i < l; i++) {
   // // para.style.color = 'green';
   // elements[i].insertBefore(node, child);
 
-  const parent = elements[i].parentElement.parentElement; //.parentElement.parentElement;
+  const parent = elements[i].parentElement.parentElement.parentElement; //.parentElement;
   // parent.setAttribute("style", "display:flex; flex-direction:row;")
 
   const newDiv = document.createElement("div");
@@ -42,6 +42,29 @@ for (var i = 0, l = elements.length; i < l; i++) {
   // const child = parent.childNodes[0];
   // parent.insertBefore(newDiv, child);
   parent.appendChild(newDiv);
+
+  const feedback = document.createElement("div");
+  
+  const feedbackLabel = document.createElement("p");
+  const feedbackLabelText = document.createTextNode("Pulse: Was this correct?");
+  feedbackLabel.appendChild(feedbackLabelText);
+  feedback.appendChild(feedbackLabel);
+
+  const feedbackFormYes = document.createElement("form");
+  const feedbackFormYesInput = document.createElement("input");
+  feedbackFormYesInput.setAttribute("type", "submit");
+  feedbackFormYesInput.setAttribute("value", "Yes");
+  feedbackFormYes.appendChild(feedbackFormYesInput);
+  feedback.appendChild(feedbackFormYes);
+
+  const feedbackFormNo = document.createElement("form");
+  const feedbackFormNoInput = document.createElement("input");
+  feedbackFormNoInput.setAttribute("type", "submit");
+  feedbackFormNoInput.setAttribute("value", "No");
+  feedbackFormNo.appendChild(feedbackFormNoInput);
+  feedback.appendChild(feedbackFormNo);
+  
+  parent.appendChild(feedback);
 }
 
 // chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
