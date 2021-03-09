@@ -12,6 +12,8 @@ function postData(title, target) {
 }
 
 function postFeedback(correct) {
+  correct = '';
+  title = '';
   const xml = new XMLHttpRequest();
   const url=`http://localhost:5000/feedback?correct=${correct}&title=${title}&target=${target}`;
   xml.open("GET", url);
