@@ -1,10 +1,11 @@
 // alert("Hello from Pulse!");
 
-// var elements = document.getElementsByClassName('LC20lb DKV0Md');
-var elements = document.getElementsByClassName('LC20lb');
-// var elements = document.getElementsByClassName('g');
+const elements = document.getElementsByClassName('LC20lb');
+const input = document.getElementsByClassName('gLFyf gsfi')[0];
+const target = input.value;
 
-console.log(elements.length + ' elements');
+console.log('Running model on ' + elements.length + ' search results');
+console.log('Target: ' + target);
 
 for (var i = 0, l = elements.length; i < l; i++) {
   // elements[i].style.color = 'green';
@@ -14,29 +15,33 @@ for (var i = 0, l = elements.length; i < l; i++) {
   // // para.style.color = 'green';
   // elements[i].insertBefore(node, child);
 
-  const parent = elements[i].parentElement.parentElement.parentElement.parentElement;
-  parent.setAttribute("style", "display:flex; flex-direction:row;")
+  const parent = elements[i].parentElement.parentElement; //.parentElement.parentElement;
+  // parent.setAttribute("style", "display:flex; flex-direction:row;")
 
   const newDiv = document.createElement("div");
-  newDiv.setAttribute("style", "display:flex; flex-direction:row; align-items:center; font-size:medium; width:20px;")
+  // newDiv.setAttribute("style", "display:flex; flex-direction:row; font-size:medium; width:20px;")
+  newDiv.setAttribute("style", "position:absolute; left:-100px; top:25px; display:flex; flex-direction:row; align-items:center; font-size:medium;")
   const circle = document.createElement("div");
-  var label = null;
+  const label = document.createElement("span");
+  label.setAttribute("style", "color:gray")
+  var text = null;
   if (i % 3 == 0) {
     circle.setAttribute("style", "height:10px; width:10px; background-color:green; border-radius:50%; margin-right:5px;");
-    label = document.createTextNode("Positive");
+    text = document.createTextNode("Positive");
   } else if (i % 3 == 1) {
     circle.setAttribute("style", "height:10px; width:10px; background-color:red; border-radius:50%; margin-right:5px;");
-    label = document.createTextNode("Negative");
+    text = document.createTextNode("Negative");
   } else {
     circle.setAttribute("style", "height:10px; width:10px; background-color:gray; border-radius:50%; margin-right:5px;");
-    label = document.createTextNode("Neutral");
+    text = document.createTextNode("Neutral");
   }
   newDiv.appendChild(circle);
-  // newDiv.appendChild(label);
+  label.appendChild(text);
+  newDiv.appendChild(label);
   
-  const child = parent.childNodes[0];
-  // parent.appendChild(newDiv);
-  parent.insertBefore(newDiv, child);
+  // const child = parent.childNodes[0];
+  // parent.insertBefore(newDiv, child);
+  parent.appendChild(newDiv);
 }
 
 // chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
