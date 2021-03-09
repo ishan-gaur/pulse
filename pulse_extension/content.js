@@ -15,6 +15,9 @@ for (var i = 0, l = elements.length; i < l; i++) {
   // // para.style.color = 'green';
   // elements[i].insertBefore(node, child);
 
+  const title = elements[i].childNodes[0].textContent;
+  console.log('i: ' + i + ', title: ' + title);
+
   const parent = elements[i].parentElement.parentElement.parentElement; //.parentElement;
   // parent.setAttribute("style", "display:flex; flex-direction:row;")
 
