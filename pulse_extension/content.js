@@ -1,24 +1,14 @@
-// alert("Hello from Pulse!");
+const results = document.getElementsByClassName('LC20lb');
+const target = document.getElementsByClassName('gLFyf gsfi')[0].value;
 
-const elements = document.getElementsByClassName('LC20lb');
-const input = document.getElementsByClassName('gLFyf gsfi')[0];
-const target = input.value;
-
-console.log('Running model on ' + elements.length + ' search results');
+console.log('Running model on ' + results.length + ' search results');
 console.log('Target: ' + target);
 
-for (var i = 0, l = elements.length; i < l; i++) {
-  // elements[i].style.color = 'green';
-  // var child = elements[i].childNodes[0];
-  // var para = document.createElement("div");
-  // var node = document.createTextNode("This is a new paragraph.");
-  // // para.style.color = 'green';
-  // elements[i].insertBefore(node, child);
-
-  const title = elements[i].childNodes[0].textContent;
+for (var i = 0, l = results.length; i < l; i++) {
+  const title = results[i].childNodes[0].textContent;
   console.log('i: ' + i + ', title: ' + title);
 
-  const parent = elements[i].parentElement.parentElement.parentElement; //.parentElement;
+  const parent = results[i].parentElement.parentElement.parentElement; //.parentElement;
   // parent.setAttribute("style", "display:flex; flex-direction:row;")
 
   const newDiv = document.createElement("div");
@@ -42,8 +32,6 @@ for (var i = 0, l = elements.length; i < l; i++) {
   label.appendChild(text);
   // newDiv.appendChild(label);
   
-  // const child = parent.childNodes[0];
-  // parent.insertBefore(newDiv, child);
   parent.appendChild(newDiv);
 
   const feedback = document.createElement("div");
@@ -73,8 +61,3 @@ for (var i = 0, l = elements.length; i < l; i++) {
   
   parent.appendChild(feedback);
 }
-
-// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-//   postData(request)
-//   sendResponse({ classification: "pro" })
-// })
