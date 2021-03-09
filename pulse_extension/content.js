@@ -44,13 +44,16 @@ for (var i = 0, l = elements.length; i < l; i++) {
   parent.appendChild(newDiv);
 
   const feedback = document.createElement("div");
+  feedback.setAttribute("style", "display:flex; align-items:center; justify-content:flex-end;")
   
   const feedbackLabel = document.createElement("p");
+  feedbackLabel.setAttribute("style", "width:fit-content; float:right; padding:5px;")
   const feedbackLabelText = document.createTextNode("Pulse: Was this correct?");
   feedbackLabel.appendChild(feedbackLabelText);
   feedback.appendChild(feedbackLabel);
 
   const feedbackFormYes = document.createElement("form");
+  feedbackFormYes.setAttribute("style", "width:fit-content; float:right; padding:5px;")
   const feedbackFormYesInput = document.createElement("input");
   feedbackFormYesInput.setAttribute("type", "submit");
   feedbackFormYesInput.setAttribute("value", "Yes");
@@ -58,6 +61,7 @@ for (var i = 0, l = elements.length; i < l; i++) {
   feedback.appendChild(feedbackFormYes);
 
   const feedbackFormNo = document.createElement("form");
+  feedbackFormNo.setAttribute("style", "width:fit-content; float:right; padding:5px 0 5px 5px;")
   const feedbackFormNoInput = document.createElement("input");
   feedbackFormNoInput.setAttribute("type", "submit");
   feedbackFormNoInput.setAttribute("value", "No");
