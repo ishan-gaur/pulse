@@ -1,3 +1,42 @@
+function postData(title, target) {
+  const xml = new XMLHttpRequest();
+  const url=`http://localhost:5000/predict?title=${title}&target=${target}`;
+  xml.open("GET", url);
+  xml.send();
+
+  xml.onreadystatechange = () => {
+    if (xml.readyState === 4) {
+      showResponse(xml.responseText);
+    }
+  }
+}
+
+function postFeedback(correct) {
+  const xml = new XMLHttpRequest();
+  const url=`http://localhost:5000/feedback?correct=${correct}&title=${title}&target=${target}`;
+  xml.open("GET", url);
+  xml.send();
+
+  // TODO: verify success response
+}
+
+function showResponse(res) {
+  if (res === '') {
+    res = 'unable to predict'
+  }
+  console.log(res);
+}
+
+function yesSubmit(event) {
+  event.preventDefault();
+  postFeedback('yes');
+}
+
+function noSubmit(event) {
+  event.preventDefault();
+  postFeedback('no');
+}
+
 const results = document.getElementsByClassName('LC20lb');
 const target = document.getElementsByClassName('gLFyf gsfi')[0].value;
 
@@ -7,6 +46,9 @@ console.log('Target: ' + target);
 for (var i = 0, l = results.length; i < l; i++) {
   const title = results[i].childNodes[0].textContent;
   console.log('i: ' + i + ', title: ' + title);
+
+  // TODO: update this specific result
+  postData(title, target);
 
   const parent = results[i].parentElement.parentElement.parentElement; //.parentElement;
   // parent.setAttribute("style", "display:flex; flex-direction:row;")
@@ -45,6 +87,7 @@ for (var i = 0, l = results.length; i < l; i++) {
 
   const feedbackFormYes = document.createElement("form");
   feedbackFormYes.setAttribute("style", "width:fit-content; float:right; padding:5px;")
+  feedbackFormYes.addEventListener('submit', yesSubmit);
   const feedbackFormYesInput = document.createElement("input");
   feedbackFormYesInput.setAttribute("type", "submit");
   feedbackFormYesInput.setAttribute("value", "Yes");
@@ -53,6 +96,7 @@ for (var i = 0, l = results.length; i < l; i++) {
 
   const feedbackFormNo = document.createElement("form");
   feedbackFormNo.setAttribute("style", "width:fit-content; float:right; padding:5px 0 5px 5px;")
+  feedbackFormNo.addEventListener('submit', noSubmit);
   const feedbackFormNoInput = document.createElement("input");
   feedbackFormNoInput.setAttribute("type", "submit");
   feedbackFormNoInput.setAttribute("value", "No");
@@ -61,3 +105,4 @@ for (var i = 0, l = results.length; i < l; i++) {
   
   parent.appendChild(feedback);
 }
+
