@@ -20,24 +20,24 @@ for (var i = 0, l = elements.length; i < l; i++) {
 
   const newDiv = document.createElement("div");
   // newDiv.setAttribute("style", "display:flex; flex-direction:row; font-size:medium; width:20px;")
-  newDiv.setAttribute("style", "position:absolute; left:-100px; top:25px; display:flex; flex-direction:row; align-items:center; font-size:medium;")
+  newDiv.setAttribute("style", "position:absolute; left:-25px; top:32px; display:flex; flex-direction:row; align-items:center; font-size:medium;")
   const circle = document.createElement("div");
   const label = document.createElement("span");
   label.setAttribute("style", "color:gray")
   var text = null;
   if (i % 3 == 0) {
-    circle.setAttribute("style", "height:10px; width:10px; background-color:green; border-radius:50%; margin-right:5px;");
+    circle.setAttribute("style", "height:10px; width:10px; background-color:green; border-radius:50%;");
     text = document.createTextNode("Positive");
   } else if (i % 3 == 1) {
-    circle.setAttribute("style", "height:10px; width:10px; background-color:red; border-radius:50%; margin-right:5px;");
+    circle.setAttribute("style", "height:10px; width:10px; background-color:red; border-radius:50%;");
     text = document.createTextNode("Negative");
   } else {
-    circle.setAttribute("style", "height:10px; width:10px; background-color:gray; border-radius:50%; margin-right:5px;");
+    circle.setAttribute("style", "height:10px; width:10px; background-color:gray; border-radius:50%;");
     text = document.createTextNode("Neutral");
   }
   newDiv.appendChild(circle);
   label.appendChild(text);
-  newDiv.appendChild(label);
+  // newDiv.appendChild(label);
   
   // const child = parent.childNodes[0];
   // parent.insertBefore(newDiv, child);
