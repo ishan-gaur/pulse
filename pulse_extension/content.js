@@ -14,10 +14,11 @@ for (var i = 0, l = elements.length; i < l; i++) {
   // // para.style.color = 'green';
   // elements[i].insertBefore(node, child);
 
-  var parent = elements[i].parentElement.parentElement;
+  const parent = elements[i].parentElement.parentElement.parentElement.parentElement;
+  parent.setAttribute("style", "display:flex; flex-direction:row;")
 
   const newDiv = document.createElement("div");
-  newDiv.setAttribute("style", "display:flex; flex-direction:row; align-items:center; font-size:medium;")
+  newDiv.setAttribute("style", "display:flex; flex-direction:row; align-items:center; font-size:medium; width:20px;")
   const circle = document.createElement("div");
   var label = null;
   if (i % 3 == 0) {
@@ -31,9 +32,11 @@ for (var i = 0, l = elements.length; i < l; i++) {
     label = document.createTextNode("Neutral");
   }
   newDiv.appendChild(circle);
-  newDiv.appendChild(label);
+  // newDiv.appendChild(label);
   
-  parent.appendChild(newDiv);
+  const child = parent.childNodes[0];
+  // parent.appendChild(newDiv);
+  parent.insertBefore(newDiv, child);
 }
 
 // chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
