@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask, render_template, request
+from flask_cors import CORS
 # TODO: Add logging and a route for feedback
 import logging
 
@@ -12,6 +13,7 @@ if os.path.exists(LOG_FILE):
    os.remove(LOG_FILE)
 
 app = Flask(__name__)
+CORS(app)
 clf = load(default_save_location)
 load_glove()
 
