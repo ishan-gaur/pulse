@@ -1,5 +1,6 @@
 import os
 from flask import Flask, render_template, request
+from flask_cors import CORS
 import logging
 import nltk
 nltk.download('vader_lexicon')
@@ -11,6 +12,7 @@ if os.path.exists(LOG_FILE):
    os.remove(LOG_FILE)
 
 app = Flask(__name__)
+CORS(app)
 logging.basicConfig(filename=LOG_FILE, level=logging.DEBUG, format="%(asctime)s %(levelname)s : %(message)s")
 sia = SentimentIntensityAnalyzer()
 
