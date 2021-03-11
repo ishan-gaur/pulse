@@ -1,0 +1,62 @@
+/* .pulse {
+  position: absolute;
+  left: -25px;
+  top: 32px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: medium;
+} */
+
+.pulse-circle {
+  position: absolute;
+  left: -25px;
+  top: 32px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+}
+
+.pulse-circle-positive {
+  background-color: green;
+}
+
+.pulse-circle-negative {
+  background-color: red;
+}
+
+.pulse-circle-neutral {
+  background-color: gray;
+}
+
+.pulse-circle-no-prediction {
+  border-width: 2px;
+  border-style: dotted;
+  border-color: gray;
+}
+
+.pulse-feedback {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: gray;
+}
+
+.pulse-feedback-label {
+  width: fit-content;
+  float: right;
+  padding: 5px;
+}
+
+.pulse-feedback-label-last {
+  width: fit-content;
+  float: right;
+  padding: 5px 0 5px 5px;
+}
+
+.pulse-feedback-label-pulse {
+  font-weight: bold;
+}

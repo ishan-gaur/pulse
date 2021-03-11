@@ -1,159 +1,107 @@
-// document.addEventListener('DOMContentLoaded', function () {
 function postData(i, title) {
   const xhr = new XMLHttpRequest();
-  const url=`http://localhost:5000/predict?title=${title}&target=${target}`;
+  const url = `http://localhost:5000/predict?title=${title}&target=${target}`;
   xhr.open("GET", url);
   xhr.send();
 
-  // xhr.onreadystatechange = () => {
-  //   if (xhr.readyState === 4) {
-  //     console.log(xhr);
-  //     console.log(xhr.responseText);
-  //     showResponse(i, xhr.responseText, title);
-  //   }
-  // }
-  xhr.addEventListener('readystatechange', function() {
+  xhr.onreadystatechange = () => {
     if (xhr.readyState === 4) {
-      console.log(xhr);
-      console.log(xhr.responseText);
       showResponse(i, xhr.responseText, title);
-      // if (xhr.status != 200) {
-      //   alert( "ERR" );
-      // } else {
-      //   alert( "SUCCESS" );
-      // }
     }
-  });
+  }
 }
 
-function showResponse(i, res, title) {
-  if (res === '') {
-    res = 'unable to predict'
-  }
-  console.log(`raw res: ${res}`);
-
-  // // ! RANDOM NUMBER GENERATOR
-  // randPred = Math.floor(Math.random() * 4);
-  // if (randPred == 0) {
-  //   res = "Positive";
-  // } else if (randPred == 1) {
-  //   res = "Negative";
-  // } else if (randPred == 2) {
-  //   res = "Neutral";
-  // } else if (randPred == 3) {
-  //   res = "unable to predict";
-  // }
-  // console.log(`new res: ${res}`);
-
-  const parent = results[i].parentElement.parentElement.parentElement; //.parentElement;
-  // parent.setAttribute("style", "display:flex; flex-direction:row;")
-
-  // TODO: decompose into styles.css
-
-  const newDiv = document.createElement("div");
-  // newDiv.setAttribute("style", "display:flex; flex-direction:row; font-size:medium; width:20px;")
-  newDiv.setAttribute("style", "position:absolute; left:-25px; top:32px; display:flex; flex-direction:row; align-items:center; font-size:medium;")
-  const circle = document.createElement("div");
-  const label = document.createElement("span");
-  label.setAttribute("style", "color:gray")
-  var text = null;
-  if (res === "Positive") {
-    circle.setAttribute("style", "height:10px; width:10px; background-color:green; border-radius:50%;");
-    text = document.createTextNode("Positive");
-  } else if (res === "Negative") {
-    circle.setAttribute("style", "height:10px; width:10px; background-color:red; border-radius:50%;");
-    text = document.createTextNode("Negative");
-  } else if (res === "Neutral") {
-    circle.setAttribute("style", "height:10px; width:10px; background-color:gray; border-radius:50%;");
-    text = document.createTextNode("Neutral");
-  } else {  // unable to predict
-    // circle.setAttribute("style", "height:10px; width:10px; border-width:1px; border-color:black; border-radius:50%;");
-    circle.setAttribute("style", "height:10px; width:10px; border-width:2px; border-style:dotted; border-color:gray; border-radius:50%;");
-    text = document.createTextNode("Unable to predict");
-  }
-  newDiv.appendChild(circle);
-  label.appendChild(text);
-  // newDiv.appendChild(label);
-  
-  // TODO: insertAfter(secondChild)
-  parent.appendChild(newDiv);
-
-  const feedback = document.createElement("div");
-  feedback.setAttribute("style", "display:flex; align-items:center; justify-content:flex-end; color:gray;");
-  
-  const feedbackLabel = document.createElement("p");
-  feedbackLabel.setAttribute("style", "width:fit-content; float:right; padding:5px;");
-  const feedbackLabelPulse = document.createElement("span");
-  feedbackLabelPulse.setAttribute("style", "font-weight:bold;")
-  const feedbackLabelPulseText = document.createTextNode("Pulse:");
-  feedbackLabelPulse.appendChild(feedbackLabelPulseText);
-  const feedbackLabelText = document.createTextNode(" Was this correct?");
-  feedbackLabel.appendChild(feedbackLabelPulse);
-  feedbackLabel.appendChild(feedbackLabelText);
-  feedback.appendChild(feedbackLabel);
-
-  const feedbackFormYes = document.createElement("form");
-  feedbackFormYes.setAttribute("style", "width:fit-content; float:right; padding:5px;");
-  feedbackFormYes.addEventListener('submit', (event) => {
-    event.preventDefault();
-    yesSubmit(res, title);
-  });
-  const feedbackFormYesInput = document.createElement("input");
-  feedbackFormYesInput.setAttribute("type", "submit");
-  feedbackFormYesInput.setAttribute("value", "Yes");
-  // feedbackFormYesInput.setAttribute("style", "color:gray; text-transform:uppercase; height:20px; border-radius:5px; border-color:gray; font-size: 10px;");
-  feedbackFormYes.appendChild(feedbackFormYesInput);
-  feedback.appendChild(feedbackFormYes);
-
-  const feedbackFormNo = document.createElement("form");
-  feedbackFormNo.setAttribute("style", "width:fit-content; float:right; padding:5px 0 5px 5px;");
-  feedbackFormNo.addEventListener('submit', (event) => {
-    event.preventDefault();
-    noSubmit(res, title);
-  });
-  const feedbackFormNoInput = document.createElement("input");
-  feedbackFormNoInput.setAttribute("type", "submit");
-  feedbackFormNoInput.setAttribute("value", "No");
-  // feedbackFormNoInput.setAttribute("style", "color:gray; text-transform:uppercase; height:20px; border-radius:5px; border-color:gray; font-size: 10px;");
-  feedbackFormNo.appendChild(feedbackFormNoInput);
-  feedback.appendChild(feedbackFormNo);
-  
-  // TODO: insertAfter(secondChild)
-  parent.appendChild(feedback);
-
-}
-
-function postFeedback(correct, res, title) {
+// TODO: verify success response
+function postFeedback(correct, _, title) {
   const xml = new XMLHttpRequest();
-  const url=`http://localhost:5000/feedback?correct=${correct}&title=${title}&target=${target}`;
+  const url = `http://localhost:5000/feedback? \
+              correct=${correct}&title=${title}&target=${target}`;
   xml.open("GET", url);
   xml.send();
-
-  // TODO: verify success response
 }
 
-function yesSubmit(res, title) {
-  postFeedback('yes', res, title);
+/* Create the colored dot. */
+function createCircle(res) {
+  const circle = document.createElement("div");
+  circle.classList.add("pulse-circle");
+  if (res === "Positive") {
+    circle.classList.add("pulse-circle-positive");
+  } else if (res === "Negative") {
+    circle.classList.add("pulse-circle-negative");
+  } else if (res === "Neutral") {
+    circle.classList.add("pulse-circle-neutral");
+  } else {                        // unable to predict
+    circle.classList.add("pulse-circle-no-prediction");
+  }
+  return circle;
 }
 
-function noSubmit(res, title) {
-  postFeedback('no', res, title);
+/* Create "Pulse: Was this correct?" label. */
+function createFeedbackFormLabel() {
+  const label = document.createElement("p");
+  label.classList.add("pulse-feedback-label");
+  
+  const labelPulse = document.createElement("span");
+  labelPulse.classList.add("pulse-feedback-label-pulse");
+
+  const labelPulseText = document.createTextNode("Pulse:");
+  labelPulse.appendChild(labelPulseText);
+  const labelText = document.createTextNode(" Was this correct?");
+  
+  label.appendChild(labelPulse);
+  label.appendChild(labelText);
+  return label;
+}
+
+function createFeedbackFormButton(yes, res, title) {
+  const button = document.createElement("form");
+  button.classList.add("pulse-feedback-label" + (yes ? "" : "-last"));
+  button.addEventListener("submit", (event) => {
+    event.preventDefault();
+    postFeedback(yes ? "yes" : "no", res, title);
+  });
+
+  const buttonInput = document.createElement("input");
+  buttonInput.type = "submit";
+  buttonInput.value = yes ? "Yes" : "No";
+  
+  button.appendChild(buttonInput);
+  return button;
+}
+
+/* Create the feedback form. */
+function createFeedbackForm(res, title) {
+  const feedbackForm = document.createElement("div");
+  feedbackForm.classList.add("pulse-feedback");
+
+  feedbackForm.appendChild(createFeedbackFormLabel());
+  feedbackForm.appendChild(createFeedbackFormButton(true, res, title));
+  feedbackForm.appendChild(createFeedbackFormButton(false, res, title));
+
+  return feedbackForm;
+}
+
+/* Get the parent element and append the new children elements. */
+// TODO: insertAfter(secondChild)
+function showResponse(i, res, title) {
+  const parent = results[i].parentElement.parentElement.parentElement;
+  parent.appendChild(createCircle(res));
+  parent.appendChild(createFeedbackForm(res, title));
 }
 
 // TODO: verify that these class names work on other machines
-const results = document.getElementsByClassName('LC20lb');
-const target = document.getElementsByClassName('gLFyf gsfi')[0].value;
+const results = document.getElementsByClassName("LC20lb");
+const target = document.getElementsByClassName("gLFyf gsfi")[0].value;
 
-console.log('Running model on ' + results.length + ' search results');
-console.log('Target: ' + target);
+console.log("Running model on " + results.length + " search results");
+console.log("Target: " + target);
 
 for (var i = 0, l = results.length; i < l; i++) {
   var title = results[i].childNodes[0].textContent;
   if (title.endsWith(" ..."))
     title = title.slice(0, -4);
 
-  console.log('i: ' + i + ', title: ' + title);
+  console.log("i: " + i + ", title: " + title);
 
   postData(i, title);
 }
-// }, false)
