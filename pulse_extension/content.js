@@ -1,6 +1,26 @@
+const BASE_URL = "http://localhost:5000/"
+
+// TODO: verify that these class names work on other machines
+const results = document.getElementsByClassName("LC20lb");
+const target = document.getElementsByClassName("gLFyf gsfi")[0].value;
+
+console.log("Running model on " + results.length + " search results");
+console.log("Target: " + target);
+
+for (var i = 0, l = results.length; i < l; i++) {
+  /* remove ellipses */
+  var title = results[i].childNodes[0].textContent.replace(/\.{3,}/gi, "");
+
+  console.log("i: " + i + ", title: " + title);
+
+  postData(i, title);
+}
+
+/* ==================== HTTP HELPER FUNCTIONS ==================== */
+
 function postData(i, title) {
   const xhr = new XMLHttpRequest();
-  const url = `http://localhost:5000/predict?title=${title}&target=${target}`;
+  const url = `${BASE_URL}predict?title=${title}&target=${target}`;
   xhr.open("GET", url);
   xhr.send();
 
@@ -14,11 +34,13 @@ function postData(i, title) {
 // TODO: verify success response
 function postFeedback(correct, _, title) {
   const xml = new XMLHttpRequest();
-  const url = `http://localhost:5000/feedback? \
+  const url = `${BASE_URL}feedback? \
               correct=${correct}&title=${title}&target=${target}`;
   xml.open("GET", url);
   xml.send();
 }
+
+/* ==================== HTML HELPER FUNCTIONS ==================== */
 
 /* Create the colored dot. */
 function createCircle(res) {
@@ -87,21 +109,4 @@ function showResponse(i, res, title) {
   const parent = results[i].parentElement.parentElement.parentElement;
   parent.appendChild(createCircle(res));
   parent.appendChild(createFeedbackForm(res, title));
-}
-
-// TODO: verify that these class names work on other machines
-const results = document.getElementsByClassName("LC20lb");
-const target = document.getElementsByClassName("gLFyf gsfi")[0].value;
-
-console.log("Running model on " + results.length + " search results");
-console.log("Target: " + target);
-
-for (var i = 0, l = results.length; i < l; i++) {
-  var title = results[i].childNodes[0].textContent;
-  if (title.endsWith(" ..."))
-    title = title.slice(0, -4);
-
-  console.log("i: " + i + ", title: " + title);
-
-  postData(i, title);
 }
