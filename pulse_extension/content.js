@@ -1,41 +1,44 @@
-const BASE_URL = "http://localhost:5000/"
+const BASE_URL = "http://localhost:5000/";
 
-// TODO: verify that these class names work on other machines
-/* For "All" Search. */
-// const results = document.getElementsByClassName("LC20lb");
-// const target = document.getElementsByClassName("gLFyf gsfi")[0].value;
+/* Wait for content to load. */
+setTimeout(function () {
+  // TODO: verify that these class names work on other machines
+  /* For "All" Search. */
+  // const results = document.getElementsByClassName("LC20lb");
+  // const target = document.getElementsByClassName("gLFyf gsfi")[0].value;
 
-/* For "News" Search. */
-const results = document.getElementsByClassName("JheGif nDgy9d");
-const target = document.getElementsByClassName("gsfi")[0].value;
+  /* For "News" Search. */
+  const results = document.getElementsByClassName("JheGif nDgy9d");
+  const target = document.getElementsByClassName("gsfi")[0].value;
 
-console.log("Running model on " + results.length + " search results");
-console.log("Target: " + target);
+  console.log("Running model on " + results.length + " search results");
+  console.log("Target: " + target);
 
-for (var i = 0, l = results.length; i < l; i++) {
-  /* remove ellipses */
-  var title = results[i].childNodes[0].textContent.replace(/\.{3,}/gi, "");
-  var snippet = results[i].parentElement.childNodes[2].childNodes[0]
-                .textContent;
+  for (var i = 0, l = results.length; i < l; i++) {
+    /* remove ellipses */
+    var title = results[i].childNodes[0].textContent.replace(/\.{3,}/gi, "");
+    var snippet = results[i].parentElement.childNodes[2].childNodes[0]
+                  .textContent;
 
-  console.log("i: " + i + ", title: " + title);
-  console.log("snippet: " + snippet);
+    console.log("i: " + i + ", title: " + title);
+    console.log("snippet: " + snippet);
 
-  postData(i, title, snippet);
-}
+    postData(i, results, target, title, snippet);
+  }
+// TODO: this timeout number is arbitrary...
+}, 100);
 
 /* ==================== HTTP HELPER FUNCTIONS ==================== */
 
-function postData(i, title, snippet) {
+function postData(i, results, target, title, snippet) {
   const xhr = new XMLHttpRequest();
-  const url = `${BASE_URL}predict?\
-              title=${title}&target=${target}&snippet=${snippet}`;
+  const url = `${BASE_URL}predict?title=${title}&target=${target}&snippet=${snippet}`;
   xhr.open("GET", url);
   xhr.send();
 
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4) {
-      showResponse(i, xhr.responseText, title);
+      showResponse(i, results, xhr.responseText, title);
     }
   }
 }
@@ -113,11 +116,19 @@ function createFeedbackForm(res, title) {
   return feedbackForm;
 }
 
+function findAncestor(el, cls) {
+  while ((el = el.parentElement) && !el.classList.contains(cls));
+  return el;
+}
+
 /* Get the parent element and append the new children elements. */
 // TODO: insertAfter(secondChild)
-function showResponse(i, res, title) {
+function showResponse(i, results, res, title) {
   console.log(`Showing response ${i}: ${res}`);
-  const parent = results[i].parentElement.parentElement.parentElement;
-  parent.appendChild(createCircle(res));
+  // const parent = results[i].parentElement.parentElement.parentElement;
+  const parent = findAncestor(results[i], "nChh6e").parentElement;
+  
+  // parent.appendChild(createCircle(res));
+  parent.insertBefore(createCircle(res), parent.childNodes[0]);
   parent.appendChild(createFeedbackForm(res, title));
 }
