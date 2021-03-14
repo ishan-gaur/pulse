@@ -7,29 +7,25 @@ const BASE_URL = "http://localhost:5000/"
 
 /* For "News" Search. */
 const results = document.getElementsByClassName("JheGif nDgy9d");
-const target = document.getElementsByClassName("gsfi")[0].value;
 
 console.log("Running model on " + results.length + " search results");
-console.log("Target: " + target);
 
 for (var i = 0, l = results.length; i < l; i++) {
   /* remove ellipses */
-  var title = results[i].childNodes[0].textContent.replace(/\.{3,}/gi, "");
-  var snippet = results[i].parentElement.childNodes[2].childNodes[0]
-                .textContent;
+  var title = results[i].childNodes[0].textContent.replace(/\.{3,}/gi, "").replace("\n", " ")
+  var snippet = results[i].parentElement.childNodes[2].childNodes[0].textContent.replace(/\.{3,}/gi, "").replace("\n", " ")
 
   console.log("i: " + i + ", title: " + title);
   console.log("snippet: " + snippet);
 
-  postData(i, title, snippet);
+  getData(i, title, snippet);
 }
 
 /* ==================== HTTP HELPER FUNCTIONS ==================== */
 
-function postData(i, title, snippet) {
+function getData(i, title, snippet) {
   const xhr = new XMLHttpRequest();
-  const url = `${BASE_URL}predict?\
-              title=${title}&target=${target}&snippet=${snippet}`;
+  const url = `${BASE_URL}predict-news?title=${title}&snippet=${snippet}`;
   xhr.open("GET", url);
   xhr.send();
 
@@ -118,6 +114,6 @@ function createFeedbackForm(res, title) {
 function showResponse(i, res, title) {
   console.log(`Showing response ${i}: ${res}`);
   const parent = results[i].parentElement.parentElement.parentElement;
-  parent.appendChild(createCircle(res));
   parent.appendChild(createFeedbackForm(res, title));
+  parent.appendChild(createCircle(res));
 }
