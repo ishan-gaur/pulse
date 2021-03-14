@@ -1,8 +1,13 @@
 const BASE_URL = "http://localhost:5000/"
 
 // TODO: verify that these class names work on other machines
-const results = document.getElementsByClassName("LC20lb");
-const target = document.getElementsByClassName("gLFyf gsfi")[0].value;
+/* For "All" Search. */
+// const results = document.getElementsByClassName("LC20lb");
+// const target = document.getElementsByClassName("gLFyf gsfi")[0].value;
+
+/* For "News" Search. */
+const results = document.getElementsByClassName("JheGif nDgy9d");
+const target = document.getElementsByClassName("gsfi")[0].value;
 
 console.log("Running model on " + results.length + " search results");
 console.log("Target: " + target);
@@ -10,17 +15,21 @@ console.log("Target: " + target);
 for (var i = 0, l = results.length; i < l; i++) {
   /* remove ellipses */
   var title = results[i].childNodes[0].textContent.replace(/\.{3,}/gi, "");
+  var snippet = results[i].parentElement.childNodes[2].childNodes[0]
+                .textContent;
 
   console.log("i: " + i + ", title: " + title);
+  console.log("snippet: " + snippet);
 
-  postData(i, title);
+  postData(i, title, snippet);
 }
 
 /* ==================== HTTP HELPER FUNCTIONS ==================== */
 
-function postData(i, title) {
+function postData(i, title, snippet) {
   const xhr = new XMLHttpRequest();
-  const url = `${BASE_URL}predict?title=${title}&target=${target}`;
+  const url = `${BASE_URL}predict?\
+              title=${title}&target=${target}&snippet=${snippet}`;
   xhr.open("GET", url);
   xhr.send();
 
@@ -34,7 +43,7 @@ function postData(i, title) {
 // TODO: verify success response
 function postFeedback(correct, _, title) {
   const xml = new XMLHttpRequest();
-  const url = `${BASE_URL}feedback? \
+  const url = `${BASE_URL}feedback?\
               correct=${correct}&title=${title}&target=${target}`;
   xml.open("GET", url);
   xml.send();
@@ -77,7 +86,8 @@ function createFeedbackFormLabel() {
 
 function createFeedbackFormButton(yes, res, title) {
   const button = document.createElement("form");
-  button.classList.add("pulse-feedback-label" + (yes ? "" : "-last"));
+  // button.classList.add("pulse-feedback-label" + (yes ? "" : "-last"));
+  button.classList.add("pulse-feedback-label");
   button.addEventListener("submit", (event) => {
     event.preventDefault();
     postFeedback(yes ? "yes" : "no", res, title);
@@ -106,6 +116,7 @@ function createFeedbackForm(res, title) {
 /* Get the parent element and append the new children elements. */
 // TODO: insertAfter(secondChild)
 function showResponse(i, res, title) {
+  console.log(`Showing response ${i}: ${res}`);
   const parent = results[i].parentElement.parentElement.parentElement;
   parent.appendChild(createCircle(res));
   parent.appendChild(createFeedbackForm(res, title));
