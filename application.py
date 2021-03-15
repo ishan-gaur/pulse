@@ -2,9 +2,7 @@ import os
 from flask import Flask, render_template, request
 from flask_cors import CORS
 import logging
-import nltk
-nltk.download('vader_lexicon')
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from vader import vader_score
 
 
 LOG_FILE = "flask_server.log"
@@ -14,21 +12,26 @@ if os.path.exists(LOG_FILE):
 app = Flask(__name__)
 CORS(app)
 logging.basicConfig(filename=LOG_FILE, level=logging.DEBUG, format="%(asctime)s %(levelname)s : %(message)s")
-sia = SentimentIntensityAnalyzer()
 
 
-@app.route("/predict")
+@app.route("/predict-old")
 def predict_sentiment():
     title = request.args.get("title")
     target = request.args.get("target")
     if not title or not target:
         return "FAILURE, MISSING ARGUMENTS"
-    labels = {"Negative": "neg", "Neutral": "neu", "Positive": "pos"}
-    pol_score = sia.polarity_scores(title)
-    sent = max(labels.keys(), key=(lambda x: pol_score[labels[x]]))
-    print("Title: {0}, Target: {1}, Prediction: {2}".format(title, target, sent))
+    labels = ["Negative", "Neutral", "Positive"]
+    sent = labels[random.randint(0, 2)]
     return sent
 
+@app.route("/predict")
+def predict_sentiment_news():
+    title = request.args.get("title")
+    snippet = request.args.get("snippet")
+    if not (title and snippet):
+        return "FAILURE, MISSING ARGUMENTS"
+    sent = vader_score(title, snippet)
+    return sent
 
 # TODO change to POST
 @app.route("/feedback")
