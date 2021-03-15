@@ -1,4 +1,5 @@
 import os
+import csv
 from flask import Flask, render_template, request
 from flask_cors import CORS
 import logging
@@ -34,14 +35,15 @@ def predict_sentiment_news():
     return sent
 
 # TODO change to POST
+user_feedback_log = "user-feedback.csv"
 @app.route("/feedback")
 def log_user_feedback():
     # TODO: error checking for the form entries?
     title = request.args.get("title")
-    target = request.args.get("target")
-    correct = True if request.args.get('correct') == "yes" else False
-    sent = 1 if predict(clf, title=title, target=target)[0] == 2 else -1
-    if not correct: sent *= -1
-    app.logger.info("Title: {0}, Target: {1}, Correct_Target: {2}".format(title, target, sent))
-    return "recorded"
+    snippet = request.args.get("snippet")
+    label = request.args.get("label")
+    with open(user_feedback_log, "a") as f:
+        writer = csv.writer(f)
+        writer.writerow([title, snippet, label])
+    return "RECORDED"
 
