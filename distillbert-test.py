@@ -15,21 +15,19 @@ DATASET = "per_sent"
 
 print("Loading Model")
 classifier = pipeline('sentiment-analysis', model=MODEL, tokenizer=TOKENIZER)
-# labels = {"POSITIVE": 2, "NEUTRAL": 1, "NEGATIVE": 0}
-labels = {"POSITIVE": 1, "NEGATIVE": 0}
+labels = {"POSITIVE": 2, "NEUTRAL": 1, "NEGATIVE": 0}
+# labels = {"POSITIVE": 1, "NEGATIVE": 0}
 
 
 def predict(snippet):
     output = classifier(snippet)
     predictions = []
     for i in range(len(output)):
-        predictions.append(labels[output[i]["label"]])
-        """
-        if abs(output[i]["score"] - 0.5) < 0.15:
+        # predictions.append(labels[output[i]["label"]])
+        if abs(output[i]["score"] - 0.5) < 0.3:
             predictions.append(labels["NEUTRAL"])
         else:
             predictions.append(labels[output[i]["label"]])
-        """
     return predictions
 
 
@@ -41,7 +39,8 @@ def calibration(data):
     for i in range(len(output)):
         y_pred.append(output[i]["score"] if output[i]["label"] == "POSITIVE" else (1 - output[i]["score"]))
     for i in range(len(y_true)):
-        y_true[i] /= 2
+        y_true[i] = 0 if y_true[i] != 2 else 1
+        # y_true[i] /= 2
     prob_true, prob_pred = calibration_curve(y_true, y_pred, n_bins=20)
     plt.plot(prob_pred, prob_true)
     plt.show()
@@ -54,7 +53,7 @@ def get_data(dataset):
         target = []
         for datapoint in dataset[key]:
             if datapoint["TRUE_SENTIMENT"] == -1: continue
-            if datapoint["TRUE_SENTIMENT"] == 1: continue
+            # if datapoint["TRUE_SENTIMENT"] == 1: continue
             input.append(datapoint["TITLE"])
             target.append(datapoint["TRUE_SENTIMENT"])
         data[key] = {"input": input, "target": target}
@@ -63,7 +62,10 @@ def get_data(dataset):
 
 def eval(data):
     print(Counter(data["target"]))
-    print(score(data["target"], [predict(s) for s in data["input"]]))
+    print(data["target"])
+    predictions = predict(data["input"])
+    print(predictions)
+    print(score(data["target"], predictions))
 
 
 print("Loading data")
@@ -75,6 +77,5 @@ for key in data.keys():
     for part in data[key].keys():
         entire_data[part].extend(data[key][part])
 """
-calibration(data["test_random"])
 eval(data["test_random"])
-print(classifier("Georgia bill is going to be terrible for voters."))
+calibration(data["test_random"])

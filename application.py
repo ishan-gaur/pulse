@@ -3,7 +3,8 @@ import csv
 from flask import Flask, render_template, request
 from flask_cors import CORS
 import logging
-from vader import vader_score
+from distilbert import dbert_score
+# from vader import vader_score
 
 
 LOG_FILE = "flask_server.log"
@@ -14,9 +15,11 @@ app = Flask(__name__)
 CORS(app)
 logging.basicConfig(filename=LOG_FILE, level=logging.DEBUG, format="%(asctime)s %(levelname)s : %(message)s")
 
+print("READY")
 
+"""
 @app.route("/predict-old")
-def predict_sentiment():
+def predict_old():
     title = request.args.get("title")
     target = request.args.get("target")
     if not title or not target:
@@ -26,21 +29,22 @@ def predict_sentiment():
     return sent
 
 @app.route("/predict-vader")
-def predict_sentiment_news():
+def predict_vader():
     title = request.args.get("title")
     snippet = request.args.get("snippet")
     if not (title and snippet):
         return "FAILURE, MISSING ARGUMENTS"
     sent = vader_score(title, snippet)
     return sent
+"""
 
 @app.route("/predict")
-def predict_sentiment_news():
+def predict():
     title = request.args.get("title")
     snippet = request.args.get("snippet")
     if not (title and snippet):
         return "FAILURE, MISSING ARGUMENTS"
-    sent = dbert_score(title, snippet)
+    sent = dbert_score(title, snippet)[0]
     return sent
 
 # TODO change to POST

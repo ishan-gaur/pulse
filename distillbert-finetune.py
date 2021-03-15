@@ -35,10 +35,11 @@ def compute_metrics(pred):
 MODEL = "distilbert-base-uncased"
 TRAINED_MODEL = "distilbert-base-uncased-finetuned-persent-5"
 FINETUNED_MODEL = "distilbert-base-uncased-finetuned-sst-2-english"
+SAVE_LOCATION = "distilbert-base-uncased-finetuned-persent-7"
 DATASET = "per_sent"
 
 print("Loading Model and Tokenizer")
-model = AutoModelForSequenceClassification.from_pretrained(FINETUNED_MODEL)
+model = AutoModelForSequenceClassification.from_pretrained(TRAINED_MODEL)
 tokenizer = AutoTokenizer.from_pretrained(FINETUNED_MODEL)
 
 print("Loading dataset, splitting, and formatting for training")
@@ -48,7 +49,7 @@ test_dataset = dataset_preprocessing(test_dataset)
 
 training_args = TrainingArguments(
     output_dir='./results',
-    num_train_epochs=5,
+    num_train_epochs=2,
     warmup_steps=500,
     weight_decay=0.01,
     logging_dir='./logs',
@@ -64,4 +65,4 @@ trainer = Trainer(
 
 print("Training")
 trainer.train()
-model.save_pretrained(TRAINED_MODEL)
+model.save_pretrained(SAVE_LOCATION)
