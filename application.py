@@ -14,7 +14,7 @@ CORS(app)
 logging.basicConfig(filename=LOG_FILE, level=logging.DEBUG, format="%(asctime)s %(levelname)s : %(message)s")
 
 
-@app.route("/predict")
+@app.route("/predict-old")
 def predict_sentiment():
     title = request.args.get("title")
     target = request.args.get("target")
@@ -24,7 +24,7 @@ def predict_sentiment():
     sent = labels[random.randint(0, 2)]
     return sent
 
-@app.route("/predict-news")
+@app.route("/predict")
 def predict_sentiment_news():
     title = request.args.get("title")
     snippet = request.args.get("snippet")
