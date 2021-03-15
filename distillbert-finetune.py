@@ -1,4 +1,4 @@
-from transformers import DistilBertForSequenceClassification, DistilBertTokenizerFast, Trainer, TrainingArguments
+from transformers import AutoModelForSequenceClassification, AutoTokenizer, Trainer, TrainingArguments
 from datasets import load_dataset
 import torch
 import numpy as np
@@ -13,10 +13,10 @@ def dataset_preprocessing(dataset):
     UNEEDED_COLUMNS = dataset.column_names
     UNEEDED_COLUMNS.remove('TITLE')
     UNEEDED_COLUMNS.remove('TRUE_SENTIMENT')
+    dataset = dataset.filter(lambda example: example['TRUE_SENTIMENT'] != 1 and example['TRUE_SENTIMENT'] != -1) #TODO make this thing multiclass!
     dataset = dataset.map(tokenize_and_relabel, batched=True, batch_size=len(dataset), remove_columns=UNEEDED_COLUMNS)
     dataset = dataset.rename_column('TITLE', 'text')
     dataset = dataset.rename_column('TRUE_SENTIMENT', 'label')
-    dataset = dataset.filter(lambda example: example['label'] != 1 and example['label'] != -1) #TODO make this thing multiclass!
     dataset.set_format('torch', columns=['input_ids', 'attention_mask', 'label'])
     return dataset
 
@@ -33,12 +33,13 @@ def compute_metrics(pred):
     }
 
 MODEL = "distilbert-base-uncased"
-TRAINED_MODEL = "distilbert-base-uncased-fintuned-persent"
+TRAINED_MODEL = "distilbert-base-uncased-finetuned-persent"
+FINETUNED_MODEL = "distilbert-base-uncased-finetuned-sst-2-english"
 DATASET = "per_sent"
 
 print("Loading Model and Tokenizer")
-model = DistilBertForSequenceClassification.from_pretrained(MODEL)
-tokenizer = DistilBertTokenizerFast.from_pretrained(MODEL)
+model = AutoModelForSequenceClassification.from_pretrained(FINETUNED_MODEL)
+tokenizer = AutoTokenizer.from_pretrained(FINETUNED_MODEL)
 
 print("Loading dataset, splitting, and formatting for training")
 train_dataset, test_dataset = load_dataset(DATASET, split=['train+validation', 'test_fixed'])
@@ -47,9 +48,7 @@ test_dataset = dataset_preprocessing(test_dataset)
 
 training_args = TrainingArguments(
     output_dir='./results',
-    num_train_epochs=5,
-    per_device_train_batch_size=16,
-    per_device_eval_batch_size=64,
+    num_train_epochs=1,
     warmup_steps=500,
     weight_decay=0.01,
     logging_dir='./logs',

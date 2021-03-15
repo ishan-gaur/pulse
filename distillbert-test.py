@@ -1,19 +1,20 @@
 from collections import Counter
 from datasets import load_dataset
 from transformers import pipeline
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import balanced_accuracy_score as score
 from sklearn.calibration import calibration_curve
 import matplotlib.pyplot as plt
 
 SEED = 12345
 MODEL = "distilbert-base-uncased"
-TRAINED_MODEL = "distilbert-base-uncased-fintuned-persent"
+TRAINED_MODEL = "distilbert-base-uncased-finetuned-persent"
+FINETUNED_MODEL = "distilbert-base-uncased-finetuned-sst-2-english"
 DATASET = "per_sent"
 
 print("Loading Model")
-classifier = pipeline('sentiment-analysis', model=TRAINED_MODEL, tokenizer=MODEL)
+classifier = pipeline('sentiment-analysis', model=FINETUNED_MODEL, tokenizer=FINETUNED_MODEL)
 # labels = {"POSITIVE": 2, "NEUTRAL": 1, "NEGATIVE": 0}
-labels = {"LABEL_1": 1, "LABEL_0": 0}
+labels = {"POSITIVE": 1, "NEGATIVE": 0}
 
 
 def predict(snippet):
@@ -36,7 +37,7 @@ def calibration(data):
     y_pred = []
     y_true = data["target"]
     for i in range(len(output)):
-        y_pred.append(output[i]["score"] if output[i]["label"] == "LABEL_1" else (1 - output[i]["score"]))
+        y_pred.append(output[i]["score"] if output[i]["label"] == "POSITIVE" else (1 - output[i]["score"]))
     for i in range(len(y_true)):
         y_true[i] /= 2
     prob_true, prob_pred = calibration_curve(y_true, y_pred, n_bins=20)
@@ -60,7 +61,7 @@ def get_data(dataset):
 
 def eval(data):
     print(Counter(data["target"]))
-    print(accuracy_score(data["target"], [predict(s) for s in data["input"]]))
+    print(score(data["target"], [predict(s) for s in data["input"]]))
 
 
 print("Loading data")
