@@ -33,7 +33,7 @@ def compute_metrics(pred):
     }
 
 MODEL = "distilbert-base-uncased"
-TRAINED_MODEL = "distilbert-base-uncased-finetuned-persent"
+TRAINED_MODEL = "distilbert-base-uncased-finetuned-persent-5"
 FINETUNED_MODEL = "distilbert-base-uncased-finetuned-sst-2-english"
 DATASET = "per_sent"
 
@@ -48,7 +48,7 @@ test_dataset = dataset_preprocessing(test_dataset)
 
 training_args = TrainingArguments(
     output_dir='./results',
-    num_train_epochs=1,
+    num_train_epochs=5,
     warmup_steps=500,
     weight_decay=0.01,
     logging_dir='./logs',

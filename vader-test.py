@@ -14,9 +14,14 @@ def predict(snippet):
     pol_score = sia.polarity_scores(snippet)
     neg, neu, pos = pol_score["neg"], pol_score["neu"], pol_score["pos"]
     max_score = max([neg, neu, pos])
+    """
     if max_score == neu:
         if max_score > 0.9:
             return 1
+    return 0 if neg > pos else 2
+    """
+    if max_score == neu: 
+        return 1
     return 0 if neg > pos else 2
 
 

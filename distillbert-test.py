@@ -6,13 +6,15 @@ from sklearn.calibration import calibration_curve
 import matplotlib.pyplot as plt
 
 SEED = 12345
-MODEL = "distilbert-base-uncased"
-TRAINED_MODEL = "distilbert-base-uncased-finetuned-persent"
+VANILLA_MODEL = "distilbert-base-uncased"
+TRAINED_MODEL = "distilbert-base-uncased-finetuned-persent-5"
 FINETUNED_MODEL = "distilbert-base-uncased-finetuned-sst-2-english"
+MODEL = TRAINED_MODEL
+TOKENIZER = FINETUNED_MODEL
 DATASET = "per_sent"
 
 print("Loading Model")
-classifier = pipeline('sentiment-analysis', model=FINETUNED_MODEL, tokenizer=FINETUNED_MODEL)
+classifier = pipeline('sentiment-analysis', model=MODEL, tokenizer=TOKENIZER)
 # labels = {"POSITIVE": 2, "NEUTRAL": 1, "NEGATIVE": 0}
 labels = {"POSITIVE": 1, "NEGATIVE": 0}
 

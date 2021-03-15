@@ -9,10 +9,10 @@ setTimeout(function () {
 
   /* For "News" Search. */
   const results = document.getElementsByClassName("JheGif nDgy9d");
-  const target = document.getElementsByClassName("gsfi")[0].value;
+  // const target = document.getElementsByClassName("gsfi")[0].value;
 
   console.log("Running model on " + results.length + " search results");
-  console.log("Target: " + target);
+  // console.log("Target: " + target);
 
   for (var i = 0, l = results.length; i < l; i++) {
     /* remove ellipses */
@@ -23,7 +23,7 @@ setTimeout(function () {
     console.log("i: " + i + ", title: " + title);
     console.log("snippet: " + snippet);
 
-    postData(i, results, target, title, snippet);
+    postData(i, results, null, title, snippet);
   }
 // TODO: this timeout number is arbitrary...
 }, 100);

@@ -25,13 +25,22 @@ def predict_sentiment():
     sent = labels[random.randint(0, 2)]
     return sent
 
-@app.route("/predict")
+@app.route("/predict-vader")
 def predict_sentiment_news():
     title = request.args.get("title")
     snippet = request.args.get("snippet")
     if not (title and snippet):
         return "FAILURE, MISSING ARGUMENTS"
     sent = vader_score(title, snippet)
+    return sent
+
+@app.route("/predict")
+def predict_sentiment_news():
+    title = request.args.get("title")
+    snippet = request.args.get("snippet")
+    if not (title and snippet):
+        return "FAILURE, MISSING ARGUMENTS"
+    sent = dbert_score(title, snippet)
     return sent
 
 # TODO change to POST
