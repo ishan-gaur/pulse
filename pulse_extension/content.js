@@ -30,24 +30,24 @@ setTimeout(function () {
 
 /* ==================== HTTP HELPER FUNCTIONS ==================== */
 
-function postData(i, results, target, title, snippet) {
+function postData(i, results, _, title, snippet) {
   const xhr = new XMLHttpRequest();
-  const url = `${BASE_URL}predict?title=${title}&target=${target}&snippet=${snippet}`;
+  const url = `${BASE_URL}predict?title=${title}&snippet=${snippet}`;
   xhr.open("GET", url);
   xhr.send();
 
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4) {
-      showResponse(i, results, xhr.responseText, title);
+      showResponse(i, results, xhr.responseText, title, snippet);
     }
   }
 }
 
 // TODO: verify success response
-function postFeedback(correct, _, title) {
+function postFeedback(correct, _, title, snippet) {
   const xml = new XMLHttpRequest();
   const url = `${BASE_URL}feedback?\
-              correct=${correct}&title=${title}&target=${target}`;
+              title=${title}&snippet=${snippet}&correct=${correct}`;
   xml.open("GET", url);
   xml.send();
 }
@@ -87,13 +87,13 @@ function createFeedbackFormLabel() {
   return label;
 }
 
-function createFeedbackFormButton(yes, res, title) {
+function createFeedbackFormButton(yes, res, title, snippet) {
   const button = document.createElement("form");
   // button.classList.add("pulse-feedback-label" + (yes ? "" : "-last"));
   button.classList.add("pulse-feedback-label");
   button.addEventListener("submit", (event) => {
     event.preventDefault();
-    postFeedback(yes ? "yes" : "no", res, title);
+    postFeedback(yes ? "yes" : "no", res, title, snippet);
   });
 
   const buttonInput = document.createElement("input");
@@ -105,13 +105,15 @@ function createFeedbackFormButton(yes, res, title) {
 }
 
 /* Create the feedback form. */
-function createFeedbackForm(res, title) {
+function createFeedbackForm(res, title, snippet) {
   const feedbackForm = document.createElement("div");
   feedbackForm.classList.add("pulse-feedback");
 
   feedbackForm.appendChild(createFeedbackFormLabel());
-  feedbackForm.appendChild(createFeedbackFormButton(true, res, title));
-  feedbackForm.appendChild(createFeedbackFormButton(false, res, title));
+  feedbackForm.appendChild(
+    createFeedbackFormButton(true, res, title, snippet));
+  feedbackForm.appendChild(
+    createFeedbackFormButton(false, res, title, snippet));
 
   return feedbackForm;
 }
@@ -123,12 +125,12 @@ function findAncestor(el, cls) {
 
 /* Get the parent element and append the new children elements. */
 // TODO: insertAfter(secondChild)
-function showResponse(i, results, res, title) {
+function showResponse(i, results, res, title, snippet) {
   console.log(`Showing response ${i}: ${res}`);
   // const parent = results[i].parentElement.parentElement.parentElement;
   const parent = findAncestor(results[i], "nChh6e").parentElement;
   
   // parent.appendChild(createCircle(res));
   parent.insertBefore(createCircle(res), parent.childNodes[0]);
-  parent.appendChild(createFeedbackForm(res, title));
+  parent.appendChild(createFeedbackForm(res, title, snippet));
 }
