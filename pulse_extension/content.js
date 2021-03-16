@@ -14,19 +14,37 @@ setTimeout(function () {
   console.log("Running model on " + results.length + " search results");
   // console.log("Target: " + target);
 
-  for (var i = 0, l = results.length; i < l; i++) {
-    /* remove ellipses */
-    var title = results[i].childNodes[0].textContent.replace(/\.{3,}/gi, "");
-    var snippet = results[i].parentElement.childNodes[2].childNodes[0]
-                  .textContent;
+  tempFunc(results, 0);
 
-    console.log("i: " + i + ", title: " + title);
-    console.log("snippet: " + snippet);
+  // for (var i = 0; i < results.length; i++) {
+  //   /* Remove ellipses. */
+  //   var title = results[i].childNodes[0].textContent.replace(/\.{3,}/gi, "");
+  //   var snippet = results[i].parentElement.childNodes[2].childNodes[0]
+  //                 .textContent;
 
-    postData(i, results, null, title, snippet);
-  }
+  //   console.log("i: " + i + ", title: " + title);
+  //   console.log("snippet: " + snippet);
+
+  //   postData(i, results, target, title, snippet);
+  // }
 // TODO: this timeout number is arbitrary...
 }, 100);
+
+/* Calls postData serially. */
+function tempFunc(results, i) {
+  if (i == results.length)
+    return;
+  
+  /* Remove ellipses. */
+  var title = results[i].childNodes[0].textContent.replace(/\.{3,}/gi, "");
+  var snippet = results[i].parentElement.childNodes[2].childNodes[0]
+                .textContent;
+
+  console.log("i: " + i + ", title: " + title);
+  console.log("snippet: " + snippet);
+
+  postData(i, results, "", title, snippet);
+}
 
 /* ==================== HTTP HELPER FUNCTIONS ==================== */
 
@@ -39,6 +57,7 @@ function postData(i, results, _, title, snippet) {
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4) {
       showResponse(i, results, xhr.responseText, title, snippet);
+      tempFunc(results, i + 1);
     }
   }
 }
