@@ -4,6 +4,7 @@ from datasets import load_dataset
 import torch
 import numpy as np
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+from sklearn.metrics import balanced_accuracy_score as score
 
 FINETUNED_MODEL = "distilbert-base-uncased-finetuned-sst-2-english"
 MODEL = FINETUNED_MODEL
@@ -11,7 +12,7 @@ TOKENIZER = FINETUNED_MODEL
 
 model = AutoModelForSequenceClassification.from_pretrained(MODEL)
 tokenizer = AutoTokenizer.from_pretrained(TOKENIZER, use_fast=True)
-classifier = pipeline('sentiment-analysis', model=MODEL, tokenizer=TOKENIZER)
+classifier = pipeline('sentiment-analysis', model=model, tokenizer=tokenizer)
 labels = {"POSITIVE": "Positive", "NEUTRAL": "Neutral", "NEGATIVE": "Negative"}
 
 def classify(snippet):
@@ -32,10 +33,18 @@ def dbert_score(text):
     score = classify(text)
     return score[0]
 
-def tokenize_and_relabel(batch):
+def relabel(batch):
     for i in range(len(batch['label'])):
         batch['label'][i] = batch['label'][i] / 2
+    return batch
+
+def tokenize(batch):
     return tokenizer(batch['text'], padding=True, truncation=True) # creates the input_ids and attention_mask columns
+
+    
+def tokenize_and_relabel(batch):
+    batch = relabel(batch)
+    return tokenize(batch)
 
 def dataset_preprocessing(dataset):
     dataset = dataset.filter(lambda example: example['label'] != 1 and example['label'] != -1) #TODO make this thing multiclass!
@@ -85,3 +94,29 @@ def train_from_feedback(epochs=1):
     model.save_pretrained(SAVE_LOCATION)
     return "MODEL UPDATED"
 
+def use_new_model():
+    global model
+    global classifier
+    model = AutoModelForSequenceClassification.from_pretrained(SAVE_LOCATION)
+    classifier = pipeline('sentiment-analysis', model=model, tokenizer=tokenizer)
+    return get_feedback_accuracy(classifier)
+
+def get_feedback_accuracy(classifier=classifier):
+    labels = {"NEGATIVE": 0, "NEUTRAL": 1, "POSITIVE": 2}
+    data_files = {"train": user_feedback_log}
+
+    dataset = load_dataset("csv", data_files=data_files, column_names=columns, download_mode="force_redownload")
+    dataset = dataset["train"]
+    dataset = dataset.map(tokenize, batched=True, batch_size=len(dataset))
+    dataset.set_format('torch', columns=['input_ids', 'attention_mask', 'label'])
+
+    output = classifier(dataset['text'])
+    predictions = []
+    for i in range(len(output)):
+        # predictions.append(labels[output[i]["label"]])
+        if abs(output[i]["score"] - 0.5) < 0.3:
+            predictions.append(labels["NEUTRAL"])
+        else:
+            predictions.append(labels[output[i]["label"]])
+    return score(dataset["label"], predictions)
+    

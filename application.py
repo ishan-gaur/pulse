@@ -4,7 +4,7 @@ import csv
 from flask import Flask, render_template, request
 from flask_cors import CORS
 import logging
-from distilbert import dbert_score, train_from_feedback
+from distilbert import dbert_score, train_from_feedback, use_new_model, get_feedback_accuracy
 from utils import combine_clean
 # from vader import vader_score
 
@@ -65,4 +65,9 @@ def log_user_feedback():
 
 @app.route("/train")
 def update_model():
-    return train_from_feedback()
+    train_from_feedback(10)
+    return str(use_new_model()) # TODO really should be a separate endpoint
+
+@app.route("/accuracy-feedback")
+def evaluate_model():
+    return str(get_feedback_accuracy())
