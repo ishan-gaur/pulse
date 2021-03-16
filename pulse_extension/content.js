@@ -65,8 +65,7 @@ function postData(i, results, _, title, snippet) {
 // TODO: verify success response
 function postFeedback(correct, _, title, snippet) {
   const xml = new XMLHttpRequest();
-  const url = `${BASE_URL}feedback?\
-              title=${title}&snippet=${snippet}&correct=${correct}`;
+  const url = `${BASE_URL}feedback?title=${title}&snippet=${snippet}&correct=${correct}`;
   xml.open("GET", url);
   xml.send();
 }
