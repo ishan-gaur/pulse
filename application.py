@@ -44,7 +44,7 @@ def predict():
     snippet = request.args.get("snippet")
     if not (title and snippet):
         return "FAILURE, MISSING ARGUMENTS"
-    sent = dbert_score(title, snippet)[0]
+    sent = dbert_score(title, snippet)
     return sent
 
 # TODO change to POST
