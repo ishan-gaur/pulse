@@ -15,7 +15,7 @@ setTimeout(function () {
   console.log("Target: " + target);
 
   for (var i = 0, l = results.length; i < l; i++) {
-    /* remove ellipses */
+    /* Remove ellipses. */
     var title = results[i].childNodes[0].textContent.replace(/\.{3,}/gi, "");
     var snippet = results[i].parentElement.childNodes[2].childNodes[0]
                   .textContent;
