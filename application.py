@@ -1,9 +1,11 @@
 import os
+from os import path
 import csv
 from flask import Flask, render_template, request
 from flask_cors import CORS
 import logging
-from distilbert import dbert_score
+from distilbert import dbert_score, train_from_feedback
+from utils import combine_clean
 # from vader import vader_score
 
 
@@ -44,7 +46,7 @@ def predict():
     snippet = request.args.get("snippet")
     if not (title and snippet):
         return "FAILURE, MISSING ARGUMENTS"
-    sent = dbert_score(title, snippet)
+    sent = dbert_score(combine_clean(title, snippet))
     return sent
 
 # TODO change to POST
@@ -54,9 +56,13 @@ def log_user_feedback():
     # TODO: error checking for the form entries?
     title = request.args.get("title")
     snippet = request.args.get("snippet")
-    label = request.args.get("label")
+    str_to_label = {"negative": 0, "neutral": 1, "positive": 2}
+    label = str_to_label[request.args.get("correct")]
     with open(user_feedback_log, "a") as f:
         writer = csv.writer(f)
-        writer.writerow([title, snippet, label])
+        writer.writerow([combine_clean(title, snippet), label])
     return "RECORDED"
 
+@app.route("/train")
+def update_model():
+    return train_from_feedback()
