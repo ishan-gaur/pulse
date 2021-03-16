@@ -99,25 +99,25 @@ function createFeedbackFormLabel() {
 
   const labelPulseText = document.createTextNode("Pulse:");
   labelPulse.appendChild(labelPulseText);
-  const labelText = document.createTextNode(" Was this correct?");
+  const labelText = document.createTextNode(" What was the correct label?");
   
   label.appendChild(labelPulse);
   label.appendChild(labelText);
   return label;
 }
 
-function createFeedbackFormButton(yes, res, title, snippet) {
+function createFeedbackFormButton(correct, res, title, snippet) {
   const button = document.createElement("form");
   // button.classList.add("pulse-feedback-label" + (yes ? "" : "-last"));
   button.classList.add("pulse-feedback-label");
   button.addEventListener("submit", (event) => {
     event.preventDefault();
-    postFeedback(yes ? "yes" : "no", res, title, snippet);
+    postFeedback(correct.toLowerCase(), res, title, snippet);
   });
 
   const buttonInput = document.createElement("input");
   buttonInput.type = "submit";
-  buttonInput.value = yes ? "Yes" : "No";
+  buttonInput.value = correct;
   
   button.appendChild(buttonInput);
   return button;
@@ -130,9 +130,11 @@ function createFeedbackForm(res, title, snippet) {
 
   feedbackForm.appendChild(createFeedbackFormLabel());
   feedbackForm.appendChild(
-    createFeedbackFormButton(true, res, title, snippet));
+    createFeedbackFormButton("Positive", res, title, snippet));
   feedbackForm.appendChild(
-    createFeedbackFormButton(false, res, title, snippet));
+    createFeedbackFormButton("Neutral", res, title, snippet));
+  feedbackForm.appendChild(
+    createFeedbackFormButton("Negative", res, title, snippet));
 
   return feedbackForm;
 }
