@@ -1,12 +1,10 @@
 import os
-from os import path
 import csv
 from flask import Flask, render_template, request
 from flask_cors import CORS
 import logging
 from distilbert import dbert_score, train_from_feedback, use_new_model, get_feedback_accuracy
 from utils import combine_clean
-# from vader import vader_score
 
 
 LOG_FILE = "flask_server.log"
@@ -19,33 +17,12 @@ logging.basicConfig(filename=LOG_FILE, level=logging.DEBUG, format="%(asctime)s 
 
 print("READY")
 
-"""
-@app.route("/predict-old")
-def predict_old():
-    title = request.args.get("title")
-    target = request.args.get("target")
-    if not title or not target:
-        return "FAILURE, MISSING ARGUMENTS"
-    labels = ["Negative", "Neutral", "Positive"]
-    sent = labels[random.randint(0, 2)]
-    return sent
-
-@app.route("/predict-vader")
-def predict_vader():
-    title = request.args.get("title")
-    snippet = request.args.get("snippet")
-    if not (title and snippet):
-        return "FAILURE, MISSING ARGUMENTS"
-    sent = vader_score(title, snippet)
-    return sent
-"""
-
 @app.route("/predict")
 def predict():
     title = request.args.get("title")
     snippet = request.args.get("snippet")
     if not (title and snippet):
-        return "FAILURE, MISSING ARGUMENTS"
+        return "FAILURE: MISSING ARGUMENTS"
     sent = dbert_score(combine_clean(title, snippet))
     return sent
 
@@ -53,9 +30,11 @@ def predict():
 user_feedback_log = "user-feedback.csv"
 @app.route("/feedback")
 def log_user_feedback():
-    # TODO: error checking for the form entries?
     title = request.args.get("title")
     snippet = request.args.get("snippet")
+    correct = request.args.get("correct")
+    if not (title and snippet and correct):
+        return "FAILURE: MISSING ARGUMENTS"
     str_to_label = {"negative": 0, "neutral": 1, "positive": 2}
     label = str_to_label[request.args.get("correct")]
     with open(user_feedback_log, "a") as f:
