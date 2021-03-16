@@ -50,3 +50,6 @@ def update_model():
 @app.route("/accuracy-feedback")
 def evaluate_model():
     return str(get_feedback_accuracy())
+
+if __name__ == '__main__':
+    app.run(threaded=False, port=5000)
